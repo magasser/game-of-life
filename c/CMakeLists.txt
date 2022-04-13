@@ -1,7 +1,26 @@
 cmake_minimum_required(VERSION 3.23.1 FATAL_ERROR)
 
+set(CMAKE_C_COMPILER "C:/Strawberry/c/bin/gcc.exe")
+set(CMAKE_CXX_COMPILER "C:/Strawberry/c/bin/g++.exe")
+
 project(GameOfLife C)
 
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.h" "src/*.c")
+set(CHECK_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries/check-0.15.2")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+find_package(Check REQUIRED)
+
+include(CheckCSourceCompiles)
+include(CheckCSourceRuns)
+include(CheckFunctionExists)
+include(CheckIncludeFile)
+include(CheckIncludeFiles)
+include(CheckLibraryExists)
+include(CheckSymbolExists)
+include(CheckTypeSize)
+
+add_subdirectory(src)
+add_subdirectory(tests)
+
+enable_testing()
+add_test(NAME check_game COMMAND check_game)

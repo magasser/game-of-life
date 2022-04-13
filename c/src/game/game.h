@@ -1,5 +1,5 @@
-#ifndef GAME_HEADER
-#define GAME_HEADER
+#ifndef GAME_H
+#define GAME_H
 
 #include <stdint.h>
 
@@ -10,6 +10,8 @@ typedef struct {
 } game_t;
 
 game_t* create_game(size_t height, size_t width);
-void    free_game(game_t* game_ptr);
+void    free_game(game_t* game);
+
+uint8_t is_cell_alive(const game_t* game, uint64_t x, uint64_t y);
 
 #endif
