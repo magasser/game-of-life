@@ -6,7 +6,7 @@
 game_t* game;
 
 void setup(void) {
-    size_t height = 10, width = 10;
+    size_t height = 3, width = 3;
     uint8_t* cells = calloc(height * width, sizeof(uint8_t));
 
     cells[0] = 1;
@@ -26,7 +26,7 @@ void teardown(void) {
 /*********** Core Tests **********/
 START_TEST(test_game_create) {
     /* Arrange */
-    size_t height = 10, width = 10;
+    size_t height = 3, width = 3;
 
     /* Act */
     game_t* result = game_create(height, width);
@@ -36,7 +36,7 @@ START_TEST(test_game_create) {
     ck_assert_uint_eq(result->width, width);
 
     for (uint64_t i = 0; i < width * height; ++i) {
-        ck_assert(result->cells[i] == 0);
+        ck_assert(result->cells[i] == DEAD);
     }
 
     free_game(result);
@@ -60,7 +60,7 @@ START_TEST(test_is_alive) {
 /*********** End Core Tests **********/
 
 /*********** Generation Tests **********/
-START_TEST(test_cell_with_no_neighbours_dies) {
+START_TEST(test_alive_cell_with_no_neighbours_dies) {
     /* Arrange */
     size_t height = 1, width = 1;
     game_t* game = game_create(height, width);
@@ -72,6 +72,84 @@ START_TEST(test_cell_with_no_neighbours_dies) {
 
     /* Assert */
     ck_assert(game->cells[0] == DEAD);
+} END_TEST
+
+START_TEST(test_alive_cell_with_two_alive_neighbours_survives) {
+    /* Arrange */
+    game->cells[0] = ALIVE;
+    game->cells[3] = ALIVE;
+
+    game->cells[4] = ALIVE;
+
+    /* Act */
+    next_generation(game);
+
+    /* Assert */
+    ck_assert(game->cells[4] == ALIVE);
+
+} END_TEST
+
+START_TEST(test_alive_cell_with_three_alive_neighbours_survives) {
+    /* Arrange */
+    game->cells[0] = ALIVE;
+    game->cells[3] = ALIVE;
+    game->cells[5] = ALIVE;
+
+    game->cells[4] = ALIVE;
+
+    /* Act */
+    next_generation(game);
+
+    /* Assert */
+    ck_assert(game->cells[4] == ALIVE);
+
+} END_TEST
+
+START_TEST(test_alive_cell_with_more_than_three_alive_neighbours_dies) {
+    /* Arrange */
+    game->cells[0] = ALIVE;
+    game->cells[3] = ALIVE;
+    game->cells[5] = ALIVE;
+    game->cells[7] = ALIVE;
+
+    game->cells[4] = ALIVE;
+
+    /* Act */
+    next_generation(game);
+
+    /* Assert */
+    ck_assert(game->cells[4] == DEAD);
+
+} END_TEST
+
+START_TEST(test_alive_cell_with_less_than_two_alive_neighbours_dies) {
+    /* Arrange */
+    game->cells[0] = ALIVE;
+
+    game->cells[4] = ALIVE;
+
+    /* Act */
+    next_generation(game);
+
+    /* Assert */
+    ck_assert(game->cells[4] == DEAD);
+
+} END_TEST
+
+START_TEST(test_dead_cell_with_three_alive_neighbours_becomes_alive) {
+    /* Arrange */
+    game->cells[0] = ALIVE;
+    game->cells[3] = ALIVE;
+    game->cells[5] = ALIVE;
+
+    game->cells[4] = DEAD;
+
+    /* Act */
+    next_generation(game);
+
+    /* Assert */
+    ck_assert(game->cells[4] == ALIVE);
+
 } END_TEST
 /*********** End Generation Tests **********/
 
@@ -90,7 +168,12 @@ Suite* game_suite(void) {
     tcase_add_test(tc_core, test_game_create);
     tcase_add_test(tc_core, test_is_alive);
 
-    tcase_add_test(tc_generation, test_cell_with_no_neighbours_dies);
+    tcase_add_test(tc_generation, test_alive_cell_with_no_neighbours_dies);
+    tcase_add_test(tc_generation, test_alive_cell_with_two_alive_neighbours_survives);
+    tcase_add_test(tc_generation, test_alive_cell_with_three_alive_neighbours_survives);
+    tcase_add_test(tc_generation, test_alive_cell_with_more_than_three_alive_neighbours_dies);
+    tcase_add_test(tc_generation, test_alive_cell_with_less_than_two_alive_neighbours_dies);
+    tcase_add_test(tc_generation, test_dead_cell_with_three_alive_neighbours_becomes_alive);
 
     suite_add_tcase(suite, tc_core);
     suite_add_tcase(suite, tc_generation);

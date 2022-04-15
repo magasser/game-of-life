@@ -5,6 +5,10 @@ set(CMAKE_CXX_COMPILER "C:/Strawberry/c/bin/g++.exe")
 
 project(GameOfLife C)
 
+set(EXECUTABLE_OUTPUT_PATH "./${CMAKE_BUILD_TYPE}")
+
+message("${EXECUTABLE_OUTPUT_PATH}")
+
 set(CHECK_INSTALL_DIR "C:/Program Files (x86)/Check")
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 

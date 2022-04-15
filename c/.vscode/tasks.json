@@ -1,0 +1,127 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CMake Debug",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "cmake",
+            "args": [
+                "-G",
+                "NMake Makefiles",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                ".."
+            ],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Create build folder",
+                "Clean build folder"
+            ]
+        },
+        {
+            "label": "CMake Release",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "cmake",
+            "args": [
+                "-G",
+                "NMake Makefiles",
+                "-DCMAKE_BUILD_TYPE=Release",
+                ".."
+            ],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Create build folder",
+                "Clean build folder"
+            ]
+        },
+        {
+            "label": "NMake Debug",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "nmake",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CMake Debug"
+            ]
+        },
+        {
+            "label": "NMake Release",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "nmake",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CMake Release"
+            ]
+        },
+        {
+            "label": "NMake Clean",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "nmake",
+            "args": [
+                "clean"
+            ]
+        },
+        {
+            "label": "NMake Test",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "nmake",
+            "args": [
+                "test"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Create build folder",
+            "type": "shell",
+            "command": "New-Item",
+            "args": [
+                "${workspaceRoot}/build",
+                "-ItemType",
+                "Directory",
+                "-Force",
+                "|",
+                "Out-Null"
+            ]
+        },
+        {
+            "label": "Clean build folder",
+            "type": "shell",
+            "command": "Remove-Item",
+            "args": [
+                "${workspaceRoot}/build/*",
+                "-Recurse",
+                "-Force",
+                "-Confirm:$false"
+            ]
+        }
+    ]
+}

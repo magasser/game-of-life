@@ -13,8 +13,8 @@ typedef struct {
 } game_t;
 
 typedef struct {
-    uint64_t x;
-    uint64_t y;
+    uint32_t x;
+    uint32_t y;
 } cell_t;
 
 game_t* game_create(size_t height, size_t width);

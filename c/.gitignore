@@ -53,6 +53,8 @@ dkms.conf
 
 # Visual Studio Code
 .vscode/
+!.vscode/tasks.json
+!.vscode/launch.json
 
 # CMake
 CMakeLists.txt.user
