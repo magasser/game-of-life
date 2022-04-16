@@ -12,11 +12,19 @@ void (*console_vtable[])() = {
 };
 
 void console_init(console_t* vis) {
-    printf("Init game in console.\n");
+    char* out = to_string(vis->game);
+
+    printf("Init %s\n", out);
+
+    free(out);
 }
 
 void console_update(console_t* vis) {
-    printf("Update game in console.\n");
+    char* out = to_string(vis->game);
+
+    printf("%s\n", out);
+
+    free(out);
 }
 
 console_t* console_create(game_t* game) {

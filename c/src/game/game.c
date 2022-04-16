@@ -7,10 +7,15 @@
 #define     NR_OF_NEIGHBOURS        8
 #define     NEIGHBOUR_RADIUS        1
 
+#define     NOTHING                 0
+#define     DIED                    1
+#define     REVIVED                2
+
 /* Function delcarations */
-void        apply_rules(const game_t* game, game_t* out_game, cell_t cell);
+uint8_t     apply_rules(const game_t* game, game_t* out_game, cell_t cell);
 uint8_t*    get_neighbours(const game_t* game, cell_t cell);
 uint8_t     nr_alive_neighbours(const uint8_t* neighbours);
+uint64_t    nr_alive_cells(const game_t* game);
 uint8_t     get_cell(const game_t* game, cell_t cell);
 void        set_cell(game_t* game, cell_t cell, uint8_t value);
 void        copy_cells(const uint8_t* from, uint8_t* to, uint64_t length);
@@ -42,6 +47,11 @@ game_t* game_create(uint8_t* cells, size_t width, size_t height) {
     game->height = height;
     game->width = width;
 
+    game->gen.gen = 1;
+    game->gen.alive = nr_alive_cells(game);
+    game->gen.died = 0;
+    game->gen.revived = 0;
+
     return game;
 }
 
@@ -56,22 +66,51 @@ uint8_t is_alive(const game_t* game, cell_t cell) {
     return get_cell(game, cell) == ALIVE;
 }
 
-void next_generation(game_t* game) {
+void next_gen(game_t* game) {
     cell_t cell;
 
     game_t* next_gen = copy_game(game);
+
+    game->gen.died = 0;
+    game->gen.revived = 0;
 
     uint64_t length = game->height * game->width;
     for (uint64_t i = 0; i < length; ++i) {
         cell.x = i % game->width;
         cell.y = i / game->width;
 
-        apply_rules(game, next_gen, cell);
+        uint8_t state = apply_rules(game, next_gen, cell);
+
+        if (state == DIED) {
+            ++game->gen.died;
+            --game->gen.alive;
+        } else if (state == REVIVED) {
+            ++game->gen.revived;
+            ++game->gen.alive;
+        }
     }
 
     update_game(next_gen, game);
 
+    ++game->gen.gen;
+
     free_game(next_gen);
+}
+
+char* to_string(const game_t* game) {
+    const uint8_t BUFFER_SIZE = 100;
+    char* buffer = malloc(BUFFER_SIZE * sizeof(char));
+    char* format = "Game [ Gen = %lld, Alive = %lld, Died = %lld, Revived = %lld ]";
+    
+    snprintf(buffer, 
+            BUFFER_SIZE, 
+            format,
+            game->gen.gen,
+            game->gen.alive,
+            game->gen.died,
+            game->gen.revived);
+
+    return buffer;
 }
 
 void copy_cells(const uint8_t* from, uint8_t* to, uint64_t length) {
@@ -87,6 +126,10 @@ game_t* copy_game(const game_t* game) {
     copy_cells(game->cells, cells, length);
 
     game_t* copy = game_create(cells, game->width, game->height);
+
+    copy->gen.died = game->gen.died;
+    copy->gen.revived = game->gen.revived;
+    copy->gen.gen = game->gen.gen;
 
     return copy;
 }
@@ -111,24 +154,30 @@ uint8_t get_cell(const game_t* game, cell_t cell) {
     return game->cells[cell.y * game->width + cell.x];
 }
 
-void apply_rules(const game_t* game, game_t* out_game, cell_t cell) {
+uint8_t apply_rules(const game_t* game, game_t* out_game, cell_t cell) {
     uint8_t alive = is_alive(game, cell);
     uint8_t* neighbours = get_neighbours(game, cell);
     uint8_t alive_neighbours = nr_alive_neighbours(neighbours);
+
+    uint8_t state = NOTHING;
 
     if (alive) {
         /* Any live cell with less than two or more than three live neighbours dies */
         if (alive_neighbours < 2 || alive_neighbours > 3) {
             set_cell(out_game, cell, DEAD);
+            state = DIED;
         }
     } else {
         /* Any dead cell with three live neighbours becomes a live cell */
         if (alive_neighbours == 3) {
             set_cell(out_game, cell, ALIVE);
+            state = REVIVED;
         }
     }
 
     free(neighbours);
+
+    return state;
 }
 
 uint8_t* get_neighbours(const game_t* game, cell_t cell) {
@@ -154,6 +203,19 @@ uint8_t nr_alive_neighbours(const uint8_t* neighbours) {
 
     for (uint8_t i = 0; i < NR_OF_NEIGHBOURS; ++i) {
         if (neighbours[i]) {
+            ++count;
+        }
+    }
+
+    return count;
+}
+
+uint64_t nr_alive_cells(const game_t* game) {
+    uint64_t count = 0;
+    uint64_t length = game->width * game->height;
+
+    for (uint64_t i = 0; i < length; ++i) {
+        if (game->cells[i] == ALIVE) {
             ++count;
         }
     }

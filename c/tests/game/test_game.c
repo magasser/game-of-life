@@ -91,7 +91,7 @@ static void test_alive_cell_with_no_neighbours_dies(void** state) {
     game_t* one_cell_game = game_create(cells, height, width);
 
     /* Act */
-    next_generation(one_cell_game);
+    next_gen(one_cell_game);
 
     /* Assert */
     assert_true(one_cell_game->cells[0] == DEAD);
@@ -110,7 +110,7 @@ static void test_alive_cell_with_two_alive_neighbours_survives(void** state) {
     game->cells[4] = ALIVE;
 
     /* Act */
-    next_generation(game);
+    next_gen(game);
 
     /* Assert */
     assert_true(game->cells[4] == ALIVE);
@@ -128,7 +128,7 @@ static void test_alive_cell_with_three_alive_neighbours_survives(void** state) {
     game->cells[4] = ALIVE;
 
     /* Act */
-    next_generation(game);
+    next_gen(game);
 
     /* Assert */
     assert_true(game->cells[4] == ALIVE);
@@ -147,7 +147,7 @@ static void test_alive_cell_with_more_than_three_alive_neighbours_dies(void** st
     game->cells[4] = ALIVE;
 
     /* Act */
-    next_generation(game);
+    next_gen(game);
 
     /* Assert */
     assert_true(game->cells[4] == DEAD);
@@ -163,7 +163,7 @@ static void test_alive_cell_with_less_than_two_alive_neighbours_dies(void** stat
     game->cells[4] = ALIVE;
 
     /* Act */
-    next_generation(game);
+    next_gen(game);
 
     /* Assert */
     assert_true(game->cells[4] == DEAD);
@@ -181,7 +181,7 @@ static void test_dead_cell_with_three_alive_neighbours_becomes_alive(void** stat
     game->cells[4] = DEAD;
 
     /* Act */
-    next_generation(game);
+    next_gen(game);
 
     /* Assert */
     assert_true(game->cells[4] == ALIVE);

@@ -18,7 +18,7 @@ void runner_start(const runner_t* r) {
     while (1) {
         delay(GEN_DELAY_MS);
 
-        next_generation(r->game);
+        next_gen(r->game);
 
         vis_update(r->vis);
     }
