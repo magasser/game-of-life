@@ -3,6 +3,9 @@
 
 #include "console.h"
 
+#define CHAR_DEAD   'o'
+#define CHAR_ALIVE  '#'
+
 void console_init(console_t* vis);
 void console_update(console_t* vis);
 
@@ -11,20 +14,15 @@ void (*console_vtable[])() = {
     [CALL_UPDATE] = console_update,
 };
 
+void print_game(const game_t* game);
+void clear_console(void);
+
 void console_init(console_t* vis) {
-    char* out = to_string(vis->game);
-
-    printf("Init %s\n", out);
-
-    free(out);
+    print_game(vis->game);
 }
 
 void console_update(console_t* vis) {
-    char* out = to_string(vis->game);
-
-    printf("%s\n", out);
-
-    free(out);
+    print_game(vis->game);
 }
 
 console_t* console_create(game_t* game) {
@@ -38,4 +36,32 @@ console_t* console_create(game_t* game) {
 
 void free_console(console_t* console) {
     free(console);
+}
+
+void print_game(const game_t* game) {
+    char* out = to_string(game);
+    printf("%s\n", out);
+    free(out);
+
+    char state;
+    cell_t cell;
+    for (uint32_t y = 0; y < game->height; ++y) {
+        for (uint32_t x = 0; x < game->width; ++x) {
+            cell.x = x;
+            cell.y = y;
+
+            state = is_alive(game, cell) ? CHAR_ALIVE : CHAR_DEAD;
+
+            putchar(state);
+
+            if (x < game->width - 1) {
+                putchar(' ');
+            }
+        }
+        putchar('\n');
+    }
+}
+
+void clear_console(void) {
+    printf("\e[1;1H\e[2J");
 }
