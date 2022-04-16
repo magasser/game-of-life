@@ -13,12 +13,14 @@ typedef struct {
 } game_t;
 
 typedef struct {
-    uint32_t x;
-    uint32_t y;
+    int32_t x;
+    int32_t y;
 } cell_t;
 
-game_t* game_create(size_t height, size_t width);
+game_t* game_create(uint8_t* cells, size_t height, size_t width);
 void    free_game(game_t* game);
+
+void    game_init(game_t* game);
 
 uint8_t is_alive(const game_t* game, const cell_t cell);
 

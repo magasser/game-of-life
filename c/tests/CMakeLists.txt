@@ -1,13 +1,11 @@
+include(FetchCMocka)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
-find_package(Check REQUIRED)
-
-include_directories(${CHECK_INCLUDE_DIRS})
-link_directories(${CHECK_LIBRARY_DIRS})
-
-set(TEST_SOURCES
-  game/check_game.c
+set(TEST_GAME_SOURCES
+  game/test_game.c
 )
 
-add_executable(check_game ${TEST_SOURCES})
-target_link_libraries(check_game game ${CHECK_LIBRARIES})
+add_executable(test_game ${TEST_GAME_SOURCES})
+
+target_link_libraries(test_game PRIVATE game cmocka-static)

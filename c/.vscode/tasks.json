@@ -11,16 +11,16 @@
             },
             "command": "cmake",
             "args": [
+                "..",
                 "-G",
                 "NMake Makefiles",
-                "-DCMAKE_BUILD_TYPE=Debug",
-                ".."
+                "-DCMAKE_BUILD_TYPE=Debug"
             ],
-            "dependsOrder": "sequence",
+            /*"dependsOrder": "sequence",
             "dependsOn": [
                 "Create build folder",
                 "Clean build folder"
-            ]
+            ]*/
         },
         {
             "label": "CMake Release",
@@ -30,15 +30,10 @@
             },
             "command": "cmake",
             "args": [
+                "..",
                 "-G",
                 "NMake Makefiles",
-                "-DCMAKE_BUILD_TYPE=Release",
-                ".."
-            ],
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Create build folder",
-                "Clean build folder"
+                "-DCMAKE_BUILD_TYPE=Release"
             ]
         },
         {
@@ -66,7 +61,7 @@
             "command": "nmake",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -97,7 +92,11 @@
             "group": {
                 "kind": "test",
                 "isDefault": true
-            }
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "NMake Debug"
+            ]
         },
         {
             "label": "Create build folder",

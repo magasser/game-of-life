@@ -71,6 +71,3 @@ _deps
 
 # Build Files
 build/
-
-# Libraries
-libraries/
