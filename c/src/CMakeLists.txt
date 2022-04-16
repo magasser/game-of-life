@@ -3,6 +3,7 @@ set(LIB_SOURCES
   ui/visualizer.c
   ui/console.c
   runner.c
+  helpers.c
 )
 
 set(MAIN_SOURCES
@@ -14,6 +15,7 @@ set(HEADERS
   ui/visualizer.h
   ui/console.h
   runner.h
+  helpers.h
 )
 
 add_library(game STATIC ${LIB_SOURCES} ${HEADERS})

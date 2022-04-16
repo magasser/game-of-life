@@ -9,7 +9,7 @@ typedef struct {
     vis_t* vis;
 } runner_t;
 
-runner_t*   runner_create(const game_t* game, const vis_t* vis);
+runner_t*   runner_create(game_t* game, vis_t* vis);
 void        free_runner(runner_t* runner);
 
 void        runner_start(const runner_t* runner);

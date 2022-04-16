@@ -138,9 +138,10 @@ uint8_t* get_neighbours(const game_t* game, cell_t cell) {
     int32_t x_max_value = fmin(cell.x + NEIGHBOUR_RADIUS, game->width - 1);
     int32_t y_max_value = fmin(cell.y + NEIGHBOUR_RADIUS, game->height - 1);
     for (uint64_t y = fmax(0, cell.y - NEIGHBOUR_RADIUS); y <= y_max_value; ++y) {
-        for (uint64_t x = fmax(0, cell.x - NEIGHBOUR_RADIUS) && i < NR_OF_NEIGHBOURS; x <= x_max_value; ++x, ++i) {
+        for (uint64_t x = fmax(0, cell.x - NEIGHBOUR_RADIUS) && i < NR_OF_NEIGHBOURS; x <= x_max_value; ++x) {
             if (x != cell.x || y != cell.y) {
                 neighbours[i] = game->cells[y * game->width + x];
+                ++i;
             }
         }
     }

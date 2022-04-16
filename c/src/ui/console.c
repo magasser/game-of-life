@@ -19,7 +19,7 @@ void console_update(console_t* vis) {
     printf("Update game in console.\n");
 }
 
-console_t* console_create(const game_t* game) {
+console_t* console_create(game_t* game) {
     console_t* console = malloc(sizeof(console_t));
 
     console->vtable = console_vtable;

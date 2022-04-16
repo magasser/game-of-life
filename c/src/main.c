@@ -3,25 +3,22 @@
 
 #include "game/game.h"
 #include "ui/console.h"
-
-void (*fn_ptr)();
+#include "runner.h"
 
 int main(void) {
-    size_t dim = 10;
+    size_t dim = 3;
 
     uint8_t* cells = calloc(dim * dim, sizeof(uint8_t));
 
-    game_t* game = game_create(cells, 10, 10);
+    game_t* game = game_create(cells, dim, dim);
 
-    printf("Game Width = %ld, Height = %ld.\n", game->width, game->height);
+    console_t* console = console_create(game);
 
-    console_t* c = console_create(game);
+    vis_t* vis = (vis_t*)console;
 
-    vis_t* console = (vis_t*)c;
-    
-    vis_init(console);
+    runner_t* r = runner_create(game, vis);
 
-    vis_update(console);
+    runner_start(r);
 
     free_game(game);
 

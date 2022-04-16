@@ -1,10 +1,11 @@
 #include <stdlib.h>
 
+#include "helpers.h"
 #include "runner.h"
 
 #define GEN_DELAY_MS    1000
 
-runner_t* runner_create(const game_t* game, const vis_t* vis) {
+runner_t* runner_create(game_t* game, vis_t* vis) {
     runner_t* r = malloc(sizeof(runner_t));
 
     r->game = game;
@@ -16,6 +17,10 @@ void runner_start(const runner_t* r) {
     
     while (1) {
         delay(GEN_DELAY_MS);
+
+        next_generation(r->game);
+
+        vis_update(r->vis);
     }
 }
 
