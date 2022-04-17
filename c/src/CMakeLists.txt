@@ -2,6 +2,7 @@ find_package(OpenGL REQUIRED)
 
 include(FetchGLFW)
 include(FetchGLEW)
+include(FetchCGLM)
 
 set(GAME_LIB_SOURCES
   game/game.c
@@ -95,6 +96,7 @@ set(GL_LIBS
   OpenGL::GL
   glfw
   libglew_static
+  cglm
 )
 
 target_link_libraries(gl ${GL_LIBS})

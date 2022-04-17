@@ -14,7 +14,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 project(GameOfLife C)
 
-add_subdirectory(libraries)
 add_subdirectory(src)
 add_subdirectory(tests)
 
