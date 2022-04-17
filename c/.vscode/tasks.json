@@ -14,13 +14,14 @@
                 "..",
                 "-G",
                 "NMake Makefiles",
-                "-DCMAKE_BUILD_TYPE=Debug"
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_C_COMPILER=gcc",
+                "-DCMAKE_CXX_COMPILER=g++"
             ],
-            /*"dependsOrder": "sequence",
+            "dependsOrder": "sequence",
             "dependsOn": [
-                "Create build folder",
-                "Clean build folder"
-            ]*/
+                "Create build folder"
+            ]
         },
         {
             "label": "CMake Release",
@@ -33,11 +34,17 @@
                 "..",
                 "-G",
                 "NMake Makefiles",
-                "-DCMAKE_BUILD_TYPE=Release"
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_C_COMPILER=gcc",
+                "-DCMAKE_CXX_COMPILER=g++"
+            ],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Create build folder"
             ]
         },
         {
-            "label": "NMake Debug",
+            "label": "NMake Build Debug",
             "type": "shell",
             "options": {
                 "cwd": "${workspaceRoot}/build"
@@ -47,13 +54,12 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "dependsOrder": "sequence",
             "dependsOn": [
                 "CMake Debug"
             ]
         },
         {
-            "label": "NMake Release",
+            "label": "NMake Rebuild Debug",
             "type": "shell",
             "options": {
                 "cwd": "${workspaceRoot}/build"
@@ -65,6 +71,24 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
+                "Clean build folder",
+                "CMake Debug"
+            ]
+        },
+        {
+            "label": "NMake Rebuild Release",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "nmake",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Clean build folder",
                 "CMake Release"
             ]
         },
@@ -95,7 +119,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "NMake Debug"
+                "NMake Build Debug"
             ]
         },
         {
@@ -114,12 +138,13 @@
         {
             "label": "Clean build folder",
             "type": "shell",
-            "command": "Remove-Item",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "git",
             "args": [
-                "${workspaceRoot}/build/*",
-                "-Recurse",
-                "-Force",
-                "-Confirm:$false"
+                "clean",
+                "-Xdf"
             ]
         }
     ]

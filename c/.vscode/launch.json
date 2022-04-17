@@ -28,7 +28,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "NMake Debug"
+            "preLaunchTask": "NMake Build Debug"
         },
         {
             "name": "(gdb) Test Debug",
@@ -52,7 +52,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "NMake Debug"
+            "preLaunchTask": "NMake Build Debug"
         },
     ]
 }

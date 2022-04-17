@@ -40,7 +40,7 @@ game_t* txt_reader_file_import(const txt_reader_t* reader, const char* file_name
 
     char* lines = calloc(MAX_DIM_SIZE * MAX_DIM_SIZE, sizeof(char));
 
-    uint16_t i, k, width, height = 0;
+    uint16_t i = 0, k = 0, width = 0, height = 0;
     char current = fgetc(file);
 
     if (current == EOF) {
@@ -53,6 +53,9 @@ game_t* txt_reader_file_import(const txt_reader_t* reader, const char* file_name
             ++k;
             width = i;
             i = 0;
+            current = fgetc(file);
+            continue;
+        } else if (current == '\r') {
             current = fgetc(file);
             continue;
         }
