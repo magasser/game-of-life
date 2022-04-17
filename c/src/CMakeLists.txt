@@ -1,3 +1,8 @@
+find_package(OpenGL REQUIRED)
+
+include(FetchGLFW)
+include(FetchGLEW)
+
 set(GAME_LIB_SOURCES
   game/game.c
   helpers.c
@@ -21,11 +26,12 @@ set(CONSOLE_LIB_SOURCES
   game/game.c
   ui/visualizer.c
   ui/console.c
-  helpers.c
 )
 
 set(GL_LIB_SOURCES
+  game/game.c
   ui/visualizer.c
+  ui/gl.c
 )
 
 set(MAIN_CONSOLE_SOURCES
@@ -65,6 +71,7 @@ set(CONSOLE_HEADERS
 set(GL_HEADERS
   game/game.h
   ui/visualizer.h
+  ui/gl.h
   helpers.h
 )
 
@@ -83,6 +90,14 @@ add_library(console
 add_library(gl 
             ${GL_LIB_SOURCES}
             ${GL_HEADERS})
+
+set(GL_LIBS 
+  OpenGL::GL
+  glfw
+  libglew_static
+)
+
+target_link_libraries(gl ${GL_LIBS})
 
 add_executable(main_console ${GAME_HEADERS} ${IO_HEADERS} ${CONSOLE_HEADERS} ${MAIN_CONSOLE_SOURCES})
 add_executable(main_gl ${GAME_HEADERS} ${IO_HEADERS} ${GL_HEADERS} ${MAIN_GL_SOURCES})

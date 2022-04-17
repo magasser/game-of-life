@@ -1,9 +1,7 @@
-# Source: https://github.com/OlivierLDff/cmocka-cmake-example/blob/master/cmake/FetchCMocka.cmake
-
 include(FetchContent)
 
-# Declare our target. We want the lastest stable version, not the master.
-# Also specify GIT_SHALLOW to avoid cloning branch we don't care about
+message("-- Fetching CMocka")
+
 FetchContent_Declare(
   cmocka
   GIT_REPOSITORY https://git.cryptomilk.org/projects/cmocka.git
@@ -11,13 +9,12 @@ FetchContent_Declare(
   GIT_SHALLOW    1
 )
 
-# We want to link to cmocka-static, so we need to set this option before calling the FetchContent_MakeAvailable
-# We also don't care about example and tests
 set(WITH_STATIC_LIB ON CACHE BOOL "CMocka: Build with a static library" FORCE)
 set(WITH_CMOCKERY_SUPPORT OFF CACHE BOOL "CMocka: Install a cmockery header" FORCE)
 set(WITH_EXAMPLES OFF CACHE BOOL "CMocka: Build examples" FORCE)
 set(UNIT_TESTING OFF CACHE BOOL "CMocka: Build with unit testing" FORCE)
 set(PICKY_DEVELOPER OFF CACHE BOOL "CMocka: Build with picky developer flags" FORCE)
 
-# Download cmocka, and execute its cmakelists.txt
 FetchContent_MakeAvailable(cmocka)
+
+message("-- Fetching CMocka - done")

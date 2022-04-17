@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.23.1 FATAL_ERROR)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 20)
 
-#set(CMAKE_C_COMPILER "C:/Strawberry/c/bin/gcc.exe")
-#set(CMAKE_CXX_COMPILER "C:/Strawberry/c/bin/g++.exe")
+set(CMAKE_C_COMPILER gcc CACHE STRING "" FORCE)
+set(CMAKE_CXX_COMPILER g++ CACHE STRING "" FORCE)
 
 set(ENV{UNIT_TESTING_DEBUG} 1)
 
@@ -14,6 +14,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 project(GameOfLife C)
 
+add_subdirectory(libraries)
 add_subdirectory(src)
 add_subdirectory(tests)
 
