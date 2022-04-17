@@ -1,31 +1,94 @@
-set(LIB_SOURCES
+set(GAME_LIB_SOURCES
   game/game.c
-  ui/visualizer.c
-  ui/console.c
+  helpers.c
+)
+
+set(IO_LIB_SOURCES
+  game/game.c
   io/file_reader.c
   io/text_reader.c
+  helpers.c
+)
+
+set(RUNNER_LIB_SOURCES
+  game/game.c
+  ui/visualizer.c  
   runner.c
   helpers.c
 )
 
-set(MAIN_SOURCES
-  main.c
+set(CONSOLE_LIB_SOURCES
+  game/game.c
+  ui/visualizer.c
+  ui/console.c
+  helpers.c
 )
 
-set(HEADERS 
+set(GL_LIB_SOURCES
+  ui/visualizer.c
+)
+
+set(MAIN_CONSOLE_SOURCES
+  main_console.c
+)
+
+set(MAIN_GL_SOURCES
+  main_gl.c
+)
+
+set(GAME_HEADERS
   game/game.h
   ui/visualizer.h
-  ui/console.h
+)
+
+set(IO_HEADERS
+  game/game.h
   io/file_reader.h
   io/text_reader.h
+  helpers.h
+)
+
+set(RUNNER_HEADERS
+  game/game.h
+  ui/visualizer.h
   runner.h
   helpers.h
 )
 
-add_library(game STATIC ${LIB_SOURCES} ${HEADERS})
+set(CONSOLE_HEADERS
+  game/game.h
+  ui/visualizer.h
+  ui/console.h
+  helpers.h
+)
 
-add_executable(main ${HEADERS} ${MAIN_SOURCES})
-target_link_libraries(main game)
+set(GL_HEADERS
+  game/game.h
+  ui/visualizer.h
+  helpers.h
+)
+
+add_library(game STATIC 
+            ${GAME_LIB_SOURCES}
+            ${GAME_HEADERS})
+add_library(io STATIC 
+            ${IO_LIB_SOURCES}
+            ${IO_HEADERS})
+add_library(runner STATIC 
+            ${RUNNER_LIB_SOURCES}
+            ${RUNNER_HEADERS})
+add_library(console 
+            ${CONSOLE_LIB_SOURCES}
+            ${CONSOLE_HEADERS})
+add_library(gl 
+            ${GL_LIB_SOURCES}
+            ${GL_HEADERS})
+
+add_executable(main_console ${GAME_HEADERS} ${IO_HEADERS} ${CONSOLE_HEADERS} ${MAIN_CONSOLE_SOURCES})
+add_executable(main_gl ${GAME_HEADERS} ${IO_HEADERS} ${GL_HEADERS} ${MAIN_GL_SOURCES})
+
+target_link_libraries(main_console game io runner console)
+target_link_libraries(main_gl game io runner gl)
 
 # install(TARGETS game
 #   RUNTIME DESTINATION bin
