@@ -1,21 +1,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "helpers.h"
 #include "game/game.h"
 #include "ui/console.h"
 #include "runner.h"
+#include "io/text_reader.h"
 
-int main(void) {
-    size_t dim = 3;
+#define ARGC    2
 
-    uint8_t* cells = calloc(dim * dim, sizeof(uint8_t));
+uint32_t main(uint32_t argc, char* argv[]) {
+    reader_t* reader = (reader_t*)txt_reader_create();
 
-    cells[2] = ALIVE;
-    cells[3] = ALIVE;
-    cells[4] = ALIVE;
-    cells[8] = ALIVE;
+    if (argc != ARGC) {
+        printf_err("Expected %d arguments but received %ld.",
+                ARGC, argc);
+        exit(errno);
+    }
 
-    game_t* game = game_create(cells, dim, dim);
+    game_t* game = file_import(reader, argv[1]);
 
     console_t* console = console_create(game);
 
@@ -28,6 +31,8 @@ int main(void) {
     free_game(game);
 
     free_console(console);
+
+    free_reader(reader);
 
     return 0;
 }

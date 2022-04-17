@@ -2,10 +2,15 @@ include(FetchCMocka)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
-set(TEST_GAME_SOURCES
+set(TEST_SOURCES
   game/test_game.c
+  test_main.c
 )
 
-add_executable(test_game ${TEST_GAME_SOURCES})
+set(TEST_HEADERS
+  tests.h
+)
 
-target_link_libraries(test_game PRIVATE game cmocka-static)
+add_executable(run_tests ${TEST_SOURCES})
+
+target_link_libraries(run_tests PRIVATE game cmocka-static)

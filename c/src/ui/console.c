@@ -3,8 +3,15 @@
 
 #include "console.h"
 
-#define CHAR_DEAD   'o'
-#define CHAR_ALIVE  '#'
+#define CHAR_DEAD   '.'
+#define CHAR_ALIVE  'X'
+
+#if defined(_WIN32) || defined(_WIN64)
+#define clrscr()    system("cls")
+#endif
+#if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
+#define clrscr()    printf("\e[1;1H\e[2J")
+#endif
 
 void console_init(console_t* vis);
 void console_update(console_t* vis);
@@ -14,14 +21,16 @@ void (*console_vtable[])() = {
     [CALL_UPDATE] = console_update,
 };
 
-void print_game(const game_t* game);
-void clear_console(void);
+static void print_game(const game_t* game);
+static void clear_console(void);
 
 void console_init(console_t* vis) {
+    clear_console();
     print_game(vis->game);
 }
 
 void console_update(console_t* vis) {
+    clear_console();
     print_game(vis->game);
 }
 
@@ -38,9 +47,9 @@ void free_console(console_t* console) {
     free(console);
 }
 
-void print_game(const game_t* game) {
+static void print_game(const game_t* game) {
     char* out = to_string(game);
-    printf("%s\n", out);
+    printf("\n%s\n", out);
     free(out);
 
     char state;
@@ -62,6 +71,6 @@ void print_game(const game_t* game) {
     }
 }
 
-void clear_console(void) {
-    printf("\e[1;1H\e[2J");
+static void clear_console(void) {
+    clrscr();
 }

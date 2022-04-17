@@ -2,6 +2,8 @@ set(LIB_SOURCES
   game/game.c
   ui/visualizer.c
   ui/console.c
+  io/file_reader.c
+  io/text_reader.c
   runner.c
   helpers.c
 )
@@ -14,6 +16,8 @@ set(HEADERS
   game/game.h
   ui/visualizer.h
   ui/console.h
+  io/file_reader.h
+  io/text_reader.h
   runner.h
   helpers.h
 )

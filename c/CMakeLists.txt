@@ -18,4 +18,4 @@ add_subdirectory(src)
 add_subdirectory(tests)
 
 enable_testing()
-add_test(NAME test_game COMMAND test_game)
+add_test(NAME run_tests COMMAND run_tests)

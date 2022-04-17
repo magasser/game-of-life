@@ -6,4 +6,6 @@
 
 void delay(int milliseconds);
 
+void printf_err(const char* message, ...);
+
 #endif

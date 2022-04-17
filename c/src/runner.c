@@ -3,7 +3,7 @@
 #include "helpers.h"
 #include "runner.h"
 
-#define GEN_DELAY_MS    1000
+#define GEN_DELAY_MS    500
 
 runner_t* runner_create(game_t* game, vis_t* vis) {
     runner_t* r = malloc(sizeof(runner_t));

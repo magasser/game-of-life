@@ -15,8 +15,8 @@ typedef struct {
 
 typedef struct {
     uint8_t* cells;
-    size_t height;
     size_t width;
+    size_t height;
     gen_stat_t gen;
 } game_t;
 
@@ -25,7 +25,7 @@ typedef struct {
     int32_t y;
 } cell_t;
 
-game_t* game_create(uint8_t* cells, size_t height, size_t width);
+game_t* game_create(uint8_t* cells, size_t width, size_t height);
 void    free_game(game_t* game);
 
 void    game_init(game_t* game);
