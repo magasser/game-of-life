@@ -10,10 +10,12 @@ typedef struct {
 
 enum {
     CALL_INIT,
-    CALL_UPDATE
+    CALL_UPDATE,
+    CALL_TERMINATE
 };
 
 void    vis_init(vis_t* vis);
 void    vis_update(vis_t* vis);
+void    vis_terminate(vis_t* vis);
 
 #endif

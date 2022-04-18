@@ -89,7 +89,7 @@
             "program": "${workspaceRoot}/build/tests/Debug/test_game.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
