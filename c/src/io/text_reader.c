@@ -31,7 +31,7 @@ txt_reader_t* txt_reader_create(void) {
 }
 
 game_t* txt_reader_file_import(const txt_reader_t* reader, const char* file_name) {
-    FILE* file = fopen(file_name, "r");
+    FILE* file = fopen(file_name, "rb");
 
     if (file == NULL) {
         printf_err("No such file or directory '%s'.", file_name);

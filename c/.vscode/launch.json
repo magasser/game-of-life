@@ -5,15 +5,67 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch Debug",
+            "name": "(gdb) Console Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/build/src/Debug/main.exe",
+            "program": "${workspaceRoot}/build/src/Debug/main_console.exe",
             "args": [
                 "${workspaceRoot}/../patterns/basic.txt"
             ],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\Strawberry\\c\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "NMake Build Debug"
+        },
+        {
+            "name": "(gdb) GL Fast Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build/src/Debug/main_gl.exe",
+            "args": [
+                "${workspaceRoot}/../patterns/basic.txt"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\Strawberry\\c\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "NMake Fast Build Debug"
+        },
+        {
+            "name": "(gdb) GL Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build/src/Debug/main_gl.exe",
+            "args": [
+                "${workspaceRoot}/../patterns/basic.txt"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",

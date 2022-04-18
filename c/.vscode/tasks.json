@@ -48,11 +48,23 @@
             "command": "nmake",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "dependsOn": [
                 "CMake Debug"
             ]
+        },
+        {
+            "label": "NMake Fast Build Debug",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "nmake",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "NMake Rebuild Debug",

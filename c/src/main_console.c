@@ -3,7 +3,7 @@
 
 #include "helpers.h"
 #include "game/game.h"
-#include "ui/console.h"
+#include "ui/console/console.h"
 #include "runner.h"
 #include "io/text_reader.h"
 
@@ -15,7 +15,7 @@ uint32_t main(uint32_t argc, char* argv[]) {
     if (argc != ARGC) {
         printf_err("Expected %d arguments but received %ld.",
                 ARGC, argc);
-        exit(errno);
+        exit(EXIT_FAILURE);
     }
 
     game_t* game = file_import(reader, argv[1]);
@@ -28,11 +28,10 @@ uint32_t main(uint32_t argc, char* argv[]) {
 
     runner_start(r);
 
-    free_game(game);
-
-    free_console(console);
-
+    free_runner(r);
     free_reader(reader);
+    free_console(console);
+    free_game(game);
 
     return 0;
 }

@@ -1,7 +1,7 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include "visualizer.h"
+#include "../visualizer.h"
 
 typedef struct {
     void (**vtable)();

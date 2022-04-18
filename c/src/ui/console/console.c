@@ -13,8 +13,8 @@
 #define clrscr()    printf("\e[1;1H\e[2J")
 #endif
 
-void console_init(console_t* vis);
-void console_update(console_t* vis);
+void console_init(console_t* console);
+void console_update(console_t* console);
 
 void (*console_vtable[])() = { 
     [CALL_INIT] = console_init,
@@ -24,14 +24,14 @@ void (*console_vtable[])() = {
 static void print_game(const game_t* game);
 static void clear_console(void);
 
-void console_init(console_t* vis) {
+void console_init(console_t* console) {
     clear_console();
-    print_game(vis->game);
+    print_game(console->game);
 }
 
-void console_update(console_t* vis) {
+void console_update(console_t* console) {
     clear_console();
-    print_game(vis->game);
+    print_game(console->game);
 }
 
 console_t* console_create(game_t* game) {
