@@ -7,8 +7,6 @@
 #define CHAR_DEAD       '.'
 #define CHAR_ALIVE      'X'
 
-#define MAX_DIM_SIZE  100
-
 game_t* txt_reader_file_import(const txt_reader_t* reader, const char* file_name);
 void    free_txt_reader(txt_reader_t* reader);
 
@@ -17,13 +15,13 @@ void (*txt_reader_vtable[])() = {
 };
 
 void* (*txt_reader_ptr_vtable[])() = {
-    [CALL_IMPORT] = txt_reader_file_import,
+    [CALL_IMPORT] = (void*)txt_reader_file_import,
 };
 
 
 txt_reader_t* txt_reader_create(void) {
     txt_reader_t* reader = malloc(sizeof(txt_reader_t));
-
+    
     reader->vtable = txt_reader_vtable;
     reader->ptr_vtable = txt_reader_ptr_vtable;
 

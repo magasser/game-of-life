@@ -5,6 +5,8 @@
 
 #include "../game/game.h"
 
+#define MAX_DIM_SIZE    INT16_MAX
+
 typedef struct {
     void* (**ptr_vtable)();
     void (**vtable)();
@@ -15,8 +17,8 @@ enum {
     CALL_FREE
 };
 
-game_t* file_import(const reader_t* reader, const char* file_name);
+game_t*     file_import(const reader_t* reader, const char* file_name);
 
-void    free_reader(reader_t* reader);
+void        free_reader(reader_t* reader);
 
 #endif

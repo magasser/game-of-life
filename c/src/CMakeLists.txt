@@ -13,6 +13,8 @@ set(IO_LIB_SOURCES
   game/game.c
   io/file_reader.c
   io/text_reader.c
+  io/rle_reader.c
+  io/reader_factory.c
   helpers.c
 )
 
@@ -54,6 +56,8 @@ set(IO_HEADERS
   game/game.h
   io/file_reader.h
   io/text_reader.h
+  io/rle_reader.h
+  io/reader_factory.h
   helpers.h
 )
 

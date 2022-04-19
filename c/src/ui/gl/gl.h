@@ -15,9 +15,6 @@ struct gl_data {
     GLuint color_id;
     GLuint vertex_array_id;
     GLuint vertex_buffer;
-    GLfloat* mvp;
-    GLsizei nr_triangles;
-    GLsizei nr_mvps;
 };
 
 typedef struct {

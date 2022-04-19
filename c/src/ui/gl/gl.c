@@ -15,7 +15,7 @@
 #define FLOATS_IN_CELL      18
 #define TRIANGLES_IN_CELL   2
 
-#define CELL_SIZE           200
+#define CELL_SIZE           1
 
 void gl_init(gl_t* gl);
 void gl_update(gl_t* gl);
@@ -28,9 +28,8 @@ void (*gl_vtable[])() = {
 };
 
 static GLFWwindow* create_window(const gl_t* gl);
-inline static void gl_update_buffers(gl_t* gl);
-inline static void gl_update_window(struct gl_data data);
-inline static void buffer_add_cell(const game_t* game, int32_t x, int32_t y, GLfloat* buffer, uint32_t index);
+inline static void gl_draw_game(gl_t* gl);
+inline static void gl_fill_buffer(const game_t* game, int32_t x, int32_t y, GLfloat* buffer, uint64_t buf_index);
 
 
 void gl_init(gl_t* gl) {
@@ -59,9 +58,7 @@ void gl_update(gl_t* gl) {
         return;
     }
 
-    gl_update_buffers(gl);
-
-    gl_update_window(*gl->_data);
+    gl_draw_game(gl);
 }
 
 void gl_terminate(gl_t* gl) {
@@ -126,22 +123,7 @@ static GLFWwindow* create_window(const gl_t* gl) {
     return window;
 }
 
-inline static void gl_update_buffers(gl_t* gl) {
-    size_t buffer_size = gl->game->gen.alive * FLOATS_IN_CELL;
-    GLfloat* vertex_buffer_data = malloc(buffer_size * sizeof(GLfloat));
-
-    size_t length = gl->game->width * gl->game->height;
-    uint32_t index = 0;
-    for (uint64_t i = 0; i < length; ++i) {
-        if (gl->game->cells[i] == ALIVE) {
-            int32_t x = i % gl->game->width;
-            int32_t y = i / gl->game->width;
-
-            buffer_add_cell(gl->game, x, y, vertex_buffer_data, index);
-            index += FLOATS_IN_CELL;
-        }
-    }
-    
+inline static void gl_draw_game(gl_t* gl) {    
     mat4 projection;
     float half_width = gl->width / 2.0f;
     float half_height = gl->height / 2.0f;
@@ -162,55 +144,58 @@ inline static void gl_update_buffers(gl_t* gl) {
     mat4 mvp;
     glm_mat4_mulN((mat4* []){ &projection, &view, &model }, 3, mvp);
 
-    gl->_data->mvp = &mvp[0][0];
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(gl->_data->shader_prog_id);
 
+    glUniformMatrix4fv(gl->_data->mvp_id, 1, GL_FALSE, &mvp[0][0]);
+    glUniform3f(gl->_data->color_id, 0.9f, 0.9f, 0.9f);
+
+    GLsizei buffer_size = gl->game->gen.alive * FLOATS_IN_CELL * sizeof(GLfloat);
+    uint32_t buf_index = 0;
+    GLfloat* vertecies = malloc(buffer_size);
+
+    size_t length = gl->game->width * gl->game->height;
+    for (uint64_t i = 0; i < length; ++i) {
+        if (gl->game->cells[i] == ALIVE) {
+            int32_t x = i % gl->game->width;
+            int32_t y = i / gl->game->width;
+
+            gl_fill_buffer(gl->game, x, y, vertecies, buf_index);
+            buf_index += FLOATS_IN_CELL;
+
+        }
+    }
+
+    glEnableVertexAttribArray(VERTEX_ATTRIB);
     glBindBuffer(GL_ARRAY_BUFFER, gl->_data->vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, buffer_size, vertex_buffer_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, buffer_size, vertecies, GL_STATIC_DRAW);
+    glVertexAttribPointer(VERTEX_ATTRIB, VERTEX_SIZE, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glDrawArrays(GL_TRIANGLES, 0, gl->game->gen.alive * TRIANGLES_IN_CELL * FLOATS_IN_CELL);
+    glDisableVertexAttribArray(VERTEX_ATTRIB);
+    
+    glfwSwapBuffers(gl->_data->window);
+    glfwPollEvents();
 
-    gl->_data->nr_triangles = gl->game->gen.alive * TRIANGLES_IN_CELL;
-
-    free(vertex_buffer_data);
+    free(vertecies);
 }
 
-inline static void gl_update_window(struct gl_data data) {    
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram(data.shader_prog_id);
-
-        glUniformMatrix4fv(data.mvp_id, 1, GL_FALSE, data.mvp);
-        glUniform3f(data.color_id, 0.9f, 0.9f, 0.9f);
-
-        glEnableVertexAttribArray(VERTEX_ATTRIB);
-        glBindBuffer(GL_ARRAY_BUFFER, data.vertex_buffer);
-        glVertexAttribPointer(VERTEX_ATTRIB, VERTEX_SIZE, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-        glDrawArrays(GL_TRIANGLES, 0, data.nr_triangles);
-        glDisableVertexAttribArray(VERTEX_ATTRIB);
-
-        glfwSwapBuffers(data.window);
-        glfwPollEvents();
-}
-
-inline static void buffer_add_cell(const game_t* game, int32_t x, int32_t y, GLfloat* buffer, uint32_t index) {
-    const float c_x = x - game->width / 4.0f;
-    const float c_y = y + game->height / 4.0f;
-    /*const float l = c_x - 0.5f;
+inline static void gl_fill_buffer(const game_t* game, int32_t x, int32_t y, GLfloat* buffer, uint64_t buf_index) {
+    const float c_x = x + game->width / -2.0f + 0.5f;
+    const float c_y = y - game->height / 2.0f + 0.5f;
+    const float l = c_x - 0.5f;
     const float b = c_y - 0.5f;
     const float r = c_x + 0.5f;
-    const float t = c_y + 0.5f;*/
-    const float l = (c_x - 0.5f) / game->width;
-    const float b = (c_y - 0.5f) / game->height;
-    const float r = (c_x + 0.5f) / game->width;
-    const float t = (c_y + 0.5f) / game->height;
+    const float t = c_y + 0.5f;
 
-    const GLfloat verticies[] = { 
+    const GLfloat verticies[] = {
         l, b, 0.0f,
         r, b, 0.0f,
         r, t, 0.0f,
         
         r, t, 0.0f,
-        l, b, 0.0f,
         l, t, 0.0f,
+        l, b, 0.0f,
     };
 
-    memcpy(buffer + index, verticies, sizeof(verticies));
+    memcpy(buffer + buf_index, &verticies, FLOATS_IN_CELL * sizeof(GLfloat));
 }

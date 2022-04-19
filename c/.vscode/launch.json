@@ -10,7 +10,8 @@
             "request": "launch",
             "program": "${workspaceRoot}/build/src/Debug/main_console.exe",
             "args": [
-                "${workspaceRoot}/../patterns/basic.txt"
+                "${workspaceRoot}/../patterns/turingmachine.rle",
+                "rle"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
@@ -36,7 +37,8 @@
             "request": "launch",
             "program": "${workspaceRoot}/build/src/Debug/main_gl.exe",
             "args": [
-                "${workspaceRoot}/../patterns/basic.txt"
+                "${workspaceRoot}/../patterns/turingmachine.rle",
+                "rle"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
@@ -62,7 +64,8 @@
             "request": "launch",
             "program": "${workspaceRoot}/build/src/Debug/main_gl.exe",
             "args": [
-                "${workspaceRoot}/../patterns/basic.txt"
+                "${workspaceRoot}/../patterns/basic.txt",
+                "txt"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",

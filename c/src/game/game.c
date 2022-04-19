@@ -111,6 +111,8 @@ char* to_string(const game_t* game) {
             game->gen.died,
             game->gen.revived);
 
+    free(format);
+
     return buffer;
 }
 

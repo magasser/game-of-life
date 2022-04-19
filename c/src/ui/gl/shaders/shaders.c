@@ -54,6 +54,7 @@ GLuint load_shaders(const char* vert_file_path, const char* frag_file_path) {
     glAttachShader(prog_id, vert_id);
     glAttachShader(prog_id, frag_id);
     glLinkProgram(prog_id);
+    glValidateProgram(prog_id);
 
     glGetProgramiv(prog_id, GL_LINK_STATUS, &result);
     glGetProgramiv(prog_id, GL_INFO_LOG_LENGTH, &info_log_length);
@@ -65,8 +66,8 @@ GLuint load_shaders(const char* vert_file_path, const char* frag_file_path) {
         free(prog_error);
     }
 
-    glDetachShader(prog_id, vert_id);
-    glDetachShader(prog_id, frag_id);
+    //glDetachShader(prog_id, vert_id);
+    //glDetachShader(prog_id, frag_id);
 
     glDeleteShader(vert_id);
     glDeleteShader(frag_id);
